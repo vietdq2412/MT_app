@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MT_app.core\MT_app.core.csproj" />
+    <ProjectReference Include="..\MT_app.Infrastructure\MT_app.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

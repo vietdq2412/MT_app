@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model MT_app.Infrastructure.Data.AuthenModels.AppUserIdentityViewModel
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "/Views/Shared/_IdentityLayout.cshtml";
+    string returnUrl = (string)ViewData["returnUrl"]!;
+
+    string formSelected = ViewData["formSelected"] as string;
+    bool check = formSelected == "Login" ? true : false;
+}
+
+<div class="row" style="text-align: center">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+</div>
+
+<div class="row content">
+    <div class="main">
+        <input type="checkbox" id="chk" aria-hidden="true" checked="@check">
+
+        <div class="signup">
+            <form method="post" asp-controller="Identity" asp-action="Register">
+                <input asp-for="ReturnUrl" value="@returnUrl" hidden="true" />
+                
+
+                <label for="chk" aria-hidden="true">Sign up</label>
+                <input asp-for="RegisterInput.Email" aria-required="true" placeholder="Email"/>
+                <span asp-validation-for="RegisterInput.Email" class="text-danger"></span>
+
+                <input asp-for="RegisterInput.Password" placeholder="Password" aria-required="true"/>
+                <span asp-validation-for="RegisterInput.Password" class="text-danger"></span>
+
+                <input asp-for="RegisterInput.ConfirmPassword" placeholder="Confirm password" aria-required="true"/>
+                <span asp-validation-for="RegisterInput.ConfirmPassword" class="text-danger"></span>
+
+                <button>Sign up</button>
+            </form>
+        </div>
+
+        <div class="login">
+            <form asp-controller="Identity" asp-action="Login" method="post">
+                <input asp-for="ReturnUrl" value="@returnUrl" hidden="true" />
+
+
+                <label for="chk" aria-hidden="true">Login</label>
+                <input asp-for="LoginInput.Email" autocomplete="username" aria-required="true"/>
+                <span asp-validation-for="LoginInput.Email" class="text-danger"></span>
+
+                <input asp-for="LoginInput.Password" autocomplete="current-password" aria-required="true"/>
+                <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+
+                <div class="checkbox">
+                    <label id="checkbox" asp-for="LoginInput.RememberMe" class="form-label">
+                        <input class="form-check-input" asp-for="LoginInput.RememberMe"/>
+                        @Html.DisplayNameFor(m => m.LoginInput.RememberMe)
+                    </label>
+                </div>
+                <button>Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+@section Heads {
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/login_register.css" asp-append-version="true" />
+}
