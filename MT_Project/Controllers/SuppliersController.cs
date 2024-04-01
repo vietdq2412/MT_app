@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MT_app.business.Services;
 using MT_app.core.Models;
 
 namespace MT_Project.Controllers
 {
+    [Authorize]
+
     public class SuppliersController : Controller
     {
         private readonly ISupplierService supplierService;

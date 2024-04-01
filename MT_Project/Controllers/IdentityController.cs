@@ -28,6 +28,14 @@ namespace MT_Project.Controllers
             return View();
         }
 
+        public IActionResult AccessDenied(string returnUrl)
+        {
+            ViewData["returnUrl"] = returnUrl;
+            ViewData["formSelected"] = "Login";
+
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Login(AppUserIdentityViewModel viewModel)
         {
@@ -36,6 +44,7 @@ namespace MT_Project.Controllers
             if (result.Succeeded)
             {
                 _logger.LogInformation("User logged in.");
+                // HttpContext.Session.SetString("userLogin", "Value");
                 return Redirect(viewModel.ReturnUrl);
             }
 
@@ -87,8 +96,11 @@ namespace MT_Project.Controllers
                 ViewData["returnUrl"] = model.ReturnUrl;
                 return View("LoginRegister", model);
             }
+            ViewData["formSelected"] = "Login";
+            ViewData["returnUrl"] = model.ReturnUrl;
+            ViewData["Messenger"] = "Please check your email to confirm your account!";
+            return View("LoginRegister", model);
 
-            return RedirectToAction("LoginRegister", new { returnUrl = model.ReturnUrl });
         }
 
         public async Task<IActionResult> ConfirmEmail(string userId, string code, string returnUrl)

@@ -3,18 +3,21 @@
 @{
     ViewData["Title"] = "Index";
 }
+<h1></h1>
+@if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+{
+    <div class="row">
+        <form asp-action="Create" method="post" class="row">
+            <div class="col-auto">
+                <input type="text" name="Name" class="form-control" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+    </div>
+}
 
-
-<div class="row">
-    <form asp-action="Create" method="post" class="row">
-        <div class="col-auto">
-            <input type="text" name="Name" class="form-control" />
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Create</button>
-        </div>
-    </form>
-</div>
 <div class="row">
     <table class="table">
         <thead>

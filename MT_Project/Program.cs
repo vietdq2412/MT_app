@@ -7,6 +7,7 @@ using MT_app.Infrastructure.Data.AuthenModels;
 using MT_app.Infrastructure.Repository;
 using MT_Project.Data;
 using System.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MT_Project
 {
@@ -31,7 +32,11 @@ namespace MT_Project
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-
+            builder.Services.ConfigureApplicationCookie(options =>
+                {
+                    options.LoginPath = "/Identity/LoginRegister"; // Specify the login page
+                    options.AccessDeniedPath = "/Identity/AccessDenied"; // Specify the access denied page
+                });
 
             builder.Services.AddControllersWithViews();
 
@@ -55,6 +60,9 @@ namespace MT_Project
             
             builder.Services.AddScoped<IIdentityService, IdentityService>();
 
+            builder.Services.AddSession();
+            builder.Services.AddDistributedMemoryCache();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -74,12 +82,13 @@ namespace MT_Project
 
             app.UseRouting();
 
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Products}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.Run();

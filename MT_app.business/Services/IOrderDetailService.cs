@@ -6,7 +6,7 @@ namespace MT_app.business.Services
     public interface IOrderDetailService : IBaseService<OrderDetail>
     {
         List<OrderDetail> FindItemsNotOrdered();
-        List<OrderDetail> FindItemsNotOrderedByProductId(long? id);
+        List<OrderDetail> FindItemNotOrderedByProductId(long? id);
     }
 
     public class OrderDetailService : IOrderDetailService
@@ -20,7 +20,7 @@ namespace MT_app.business.Services
 
         public Task Save(OrderDetail orderDetail)
         {
-            List<OrderDetail> od = FindItemsNotOrderedByProductId(orderDetail.ProductId);
+            List<OrderDetail> od = FindItemNotOrderedByProductId(orderDetail.ProductId);
             if (od.Any())
             {
                 OrderDetail existOd = od[0];
@@ -44,10 +44,11 @@ namespace MT_app.business.Services
 
         public List<OrderDetail> FindItemsNotOrdered()
         {
-            return oderDetailRepository.findNotOrderedItem().Result;
+            return oderDetailRepository.findNotOrderedItem()
+                .Result;
         }
 
-        public List<OrderDetail> FindItemsNotOrderedByProductId(long? id)
+        public List<OrderDetail> FindItemNotOrderedByProductId(long? id)
         {
             return oderDetailRepository.findItemsNotOrderedByProductId(id).Result;
         }

@@ -32,7 +32,21 @@
 
                 <input asp-for="RegisterInput.ConfirmPassword" placeholder="Confirm password" aria-required="true"/>
                 <span asp-validation-for="RegisterInput.ConfirmPassword" class="text-danger"></span>
-
+                
+                
+                @* <div class="row select-role"> *@
+                @*     <div class="col-4"> *@
+                @*         Staff<input type="radio" asp-for="RegisterInput.Role" value="Staff"> *@
+                @*     </div> *@
+                @*     <div class="col-4"> *@
+                @*         Manager<input type="radio" asp-for="RegisterInput.Role" value="Manager"> *@
+                @* *@
+                @*     </div> *@
+                @*     <div class="col-4"> *@
+                @*         Admin<input type="radio" asp-for="RegisterInput.Role" value="Admin"> *@
+                @*     </div> *@
+                @* </div> *@
+                
                 <button>Sign up</button>
             </form>
         </div>

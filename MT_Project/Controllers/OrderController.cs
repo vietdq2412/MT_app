@@ -57,8 +57,13 @@ namespace MT_Project.Controllers
             {
                 Name = "order",
                 OrderDetails = orderDetailService.FindItemsNotOrdered(),
-                Status = OrderStatus.Pending.ToString()
+                Status = OrderStatus.Pending.ToString(),
             };
+            order.TotalPrice = 0;
+            foreach (var item in order.OrderDetails)
+            {
+                order.TotalPrice += item.TotalPrice;
+            }
 
             await orderService.Save(order);
             return Redirect(nameof(Cart));
