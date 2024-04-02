@@ -13,5 +13,7 @@ namespace MT_app.core.Models
         public string? Address { get; set; }
         public string? Description { get; set; }
         public int? OrderCount { get; set;}
+        public ICollection<Order>? Orders { get; set;}
+
     }
 }

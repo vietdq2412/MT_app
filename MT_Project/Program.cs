@@ -59,6 +59,9 @@ namespace MT_Project
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            
             builder.Services.AddScoped<IIdentityService, IdentityService>();
 
             builder.Services.AddSession();

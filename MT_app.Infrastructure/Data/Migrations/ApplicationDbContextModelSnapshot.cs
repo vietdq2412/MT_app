@@ -34,7 +34,7 @@ namespace MT_Project.Data.Migrations
 
                     b.HasIndex("ProductsId");
 
-                    b.ToTable("CategoryProduct");
+                    b.ToTable("CategoryProduct", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -263,7 +263,7 @@ namespace MT_Project.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("MT_app.core.Models.Customer", b =>
@@ -300,7 +300,7 @@ namespace MT_Project.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("MT_app.core.Models.Order", b =>
@@ -344,7 +344,7 @@ namespace MT_Project.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("MT_app.core.Models.OrderDetail", b =>
@@ -382,7 +382,7 @@ namespace MT_Project.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("MT_app.core.Models.Product", b =>
@@ -416,7 +416,7 @@ namespace MT_Project.Data.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("MT_app.core.Models.Supplier", b =>
@@ -444,7 +444,7 @@ namespace MT_Project.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Suppliers");
+                    b.ToTable("Suppliers", (string)null);
                 });
 
             modelBuilder.Entity("MT_app.core.Models.AppUser", b =>
