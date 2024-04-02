@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MT_app.core.Models;
 using MT_app.Infrastructure.Data.AuthenModels;
 
 namespace MT_Project.Areas.Identity.Pages.Account.Manage

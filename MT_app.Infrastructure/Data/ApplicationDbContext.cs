@@ -16,6 +16,7 @@ namespace MT_app.Infrastructure.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
@@ -23,11 +24,11 @@ namespace MT_app.Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<IdentityRole>().HasData(
-                new IdentityRole(){ Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "Admin"},
-                new IdentityRole(){ Name = "Manager", ConcurrencyStamp = "2", NormalizedName = "Manager"},
-                new IdentityRole(){ Name = "Staff", ConcurrencyStamp = "3", NormalizedName = "Staff" }
-            );
+            // builder.Entity<IdentityRole>().HasData(
+            //     new IdentityRole(){ Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "Admin"},
+            //     new IdentityRole(){ Name = "Manager", ConcurrencyStamp = "2", NormalizedName = "Manager"},
+            //     new IdentityRole(){ Name = "Staff", ConcurrencyStamp = "3", NormalizedName = "Staff" }
+            // );
 
             builder.ApplyConfiguration(new AppEntityConfiguration());
         }

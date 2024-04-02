@@ -8,6 +8,7 @@ using MT_app.Infrastructure.Repository;
 using MT_Project.Data;
 using System.Configuration;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MT_app.core.Models;
 
 namespace MT_Project
 {

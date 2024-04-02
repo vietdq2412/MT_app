@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using MT_app.core.Models;
 using MT_app.Infrastructure.Data.AuthenModels;
 
 namespace MT_Project.Areas.Identity.Pages.Account

@@ -4,6 +4,7 @@ using MT_app.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MT_Project.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240401110228_addCustomerEntity")]
+    partial class addCustomerEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -311,9 +313,6 @@ namespace MT_Project.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
@@ -326,9 +325,6 @@ namespace MT_Project.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
@@ -339,8 +335,6 @@ namespace MT_Project.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("CustomerId");
 
@@ -447,7 +441,7 @@ namespace MT_Project.Data.Migrations
                     b.ToTable("Suppliers");
                 });
 
-            modelBuilder.Entity("MT_app.core.Models.AppUser", b =>
+            modelBuilder.Entity("MT_app.Infrastructure.Data.AuthenModels.AppUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -530,15 +524,9 @@ namespace MT_Project.Data.Migrations
 
             modelBuilder.Entity("MT_app.core.Models.Order", b =>
                 {
-                    b.HasOne("MT_app.core.Models.AppUser", "AppUser")
-                        .WithMany("Orders")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("MT_app.core.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId");
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("Customer");
                 });
@@ -575,11 +563,6 @@ namespace MT_Project.Data.Migrations
             modelBuilder.Entity("MT_app.core.Models.Supplier", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("MT_app.core.Models.AppUser", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

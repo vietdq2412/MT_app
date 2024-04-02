@@ -1,4 +1,5 @@
-﻿@inject SignInManager<AppUser> SignInManager
+﻿@using MT_app.core.Models
+@inject SignInManager<AppUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

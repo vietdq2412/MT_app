@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using MT_app.core.Models;
 using MT_app.Infrastructure.Data.AuthenModels;
 
 namespace MT_Project.Areas.Identity.Pages.Account
