@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using MT_app.core.Models;
 using MT_app.Infrastructure.Data;
 
 namespace MT_app.Infrastructure.Repository
 {
-    public interface ICustomerRepository: IBaseRepository<Customer>
+    public interface ICustomerRepository : IBaseRepository<Customer>
     {
-        
+        bool CheckDuplicatePhoneNumber(string phoneNumber);
     }
 
     public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
@@ -20,6 +21,11 @@ namespace MT_app.Infrastructure.Repository
         public CustomerRepository(ApplicationDbContext appDbContext) : base(appDbContext)
         {
             this.DbContext = appDbContext;
+        }
+
+        public bool CheckDuplicatePhoneNumber(string phoneNumber)
+        {
+             return DbContext.Customers.Any(c => c.PhoneNumber == phoneNumber);
         }
     }
 }

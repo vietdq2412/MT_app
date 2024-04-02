@@ -17,6 +17,10 @@ namespace MT_Project.Controllers
         public async Task<IActionResult> Index()
         {
             List<Customer> list = await _customerService.FindAll();
+            var message = TempData["Message"] as string;
+            var error = TempData["Error"] as string;
+            ViewData["Message"] = message;
+            ViewData["Error"] = error;
             return View(list);
         }
 
@@ -29,8 +33,15 @@ namespace MT_Project.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Customer customer)
         {
-            await _customerService.Save(customer);
+            if (!_customerService.CheckDuplicatePhoneNumber(customer.PhoneNumber))
+            {
+                await _customerService.Save(customer);
+                return RedirectToAction(nameof(Index));
+            }
+            ModelState.AddModelError(string.Empty, "Phone number duplicated!!");
+            TempData["Error"] = "Phone number duplicated!!";
             return RedirectToAction(nameof(Index));
+
         }
     }
 }

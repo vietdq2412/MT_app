@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "Index";
 }
-<h1>@User.Claims</h1>
+@section Heads{
+    <link rel="stylesheet" href="~/css/customerIndex.css" asp-append-version="true" />
+}
+<p class="error">@ViewData["Error"]</p>
+<p class="message">@ViewData["Message"]</p>
 
     <div class="row">
         <form asp-action="Create" method="post" class="row">

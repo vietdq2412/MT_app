@@ -30,6 +30,10 @@ namespace MT_app.Infrastructure.Data
             //     new IdentityRole(){ Name = "Staff", ConcurrencyStamp = "3", NormalizedName = "Staff" }
             // );
 
+            builder.Entity<Customer>()
+                .HasIndex(c => c.PhoneNumber)
+                .IsUnique();
+
             builder.ApplyConfiguration(new AppEntityConfiguration());
         }
 

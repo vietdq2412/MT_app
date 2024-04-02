@@ -8,12 +8,13 @@ using MT_app.Infrastructure.Repository;
 
 namespace MT_app.business.Services
 {
-    public interface ICustomerService: IBaseService<Customer>
+    public interface ICustomerService : IBaseService<Customer>
     {
-        Task FindByPhoneNumber(string phoneNumber);
+        Task<Customer> FindByPhoneNumber(string phoneNumber);
+        bool CheckDuplicatePhoneNumber(string customerPhoneNumber);
     }
 
-    public class CustomerService: ICustomerService
+    public class CustomerService : ICustomerService
     {
         public ICustomerRepository customerRepository { get; }
 
@@ -50,6 +51,16 @@ namespace MT_app.business.Services
         }
 
         public Task FindByPhoneNumber(string phoneNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CheckDuplicatePhoneNumber(string customerPhoneNumber)
+        {
+           return customerRepository.CheckDuplicatePhoneNumber(customerPhoneNumber);
+        }
+
+        Task<Customer> ICustomerService.FindByPhoneNumber(string phoneNumber)
         {
             throw new NotImplementedException();
         }
