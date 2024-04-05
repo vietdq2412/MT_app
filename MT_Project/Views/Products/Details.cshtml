@@ -59,7 +59,7 @@
     function addProductToCart() {
         const quantity = $("#quantity").val();
         if (quantity !== null && !isNaN(quantity) && parseInt(quantity) > 0) {
-            const url = `/Order/AddProductToCart?productId=${@Model.Id}&quantity=${quantity}`;
+            const url = `/Order/AddProductToOrder?productId=${@Model.Id}&quantity=${quantity}`;
             window.location.href = url;
         } else {
             alert("invalid quantity!");

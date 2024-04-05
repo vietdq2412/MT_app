@@ -1,7 +1,15 @@
-﻿.product-img {
+﻿.container {
+}
+
+.order {
+    border: aqua 2px solid;
+}
+
+.product-img {
     width: 80%;
     height: 80%;
 }
+
 
 h4 {
     color: aquamarine

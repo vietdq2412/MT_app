@@ -3,28 +3,31 @@
 @{
     ViewData["Title"] = "Index";
 }
+
 @section Heads{
-    <link rel="stylesheet" href="~/css/customerIndex.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/customerIndex.css" asp-append-version="true"/>
 }
-<p class="error">@ViewData["Error"]</p>
+
+<p class="error" id="error">@ViewData["Error"]</p>
 <p class="message">@ViewData["Message"]</p>
 
-    <div class="row">
-        <form asp-action="Create" method="post" class="row">
-            <div class="col-auto">
-                <input type="text" name="Name" class="form-control" />
-            </div>
-            <div class="col-auto">
-                <input type="text" name="PhoneNumber" class="form-control"/>
-            </div>
-            <div class="col-auto">
-                <input type="text" name="Address" class="form-control" />
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Create</button>
-            </div>
-        </form>
-    </div>
+<div class="row">
+    <form asp-action="Create" method="post" class="row">
+        <div class="col-auto">
+            <label>Name</label>
+            <input type="text" name="Name" class="form-control"/>
+        </div>
+        <div class="col-auto">
+            <input type="text" name="PhoneNumber" id="phoneNumber" class="form-control"/>
+        </div>
+        <div class="col-auto">
+            <input type="text" name="Address" class="form-control"/>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</div>
 
 <div class="row">
     <table class="table">
@@ -40,16 +43,17 @@
                 @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
+                @Html.DisplayNameFor(model => model.OrderCount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedDate)
+                @Html.DisplayNameFor(model => model.CreatedDate)
             </th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -61,10 +65,10 @@
                     @Html.DisplayFor(modelItem => item.Address)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                    @Html.DisplayFor(modelItem => item.OrderCount)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.UpdatedDate)
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
                 </td>
                 <td>
                     <a asp-action="" asp-route-id="@item.Id">Delete</a>
@@ -73,5 +77,23 @@
         }
         </tbody>
     </table>
-
+     
 </div>
+ 
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $("#phoneNumber").change(function (event) {
+                var phoneNumber = $("#phoneNumber").val();
+                var phoneRegex = /^\d{10}$/;
+
+                if (!phoneRegex.test(phoneNumber)) {
+                    $("#error").text("Invalid phone number. Please enter 10 digit!!");
+                    $("#phoneNumber").focus();
+                    event.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+    </script>
+    
+}

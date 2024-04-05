@@ -12,6 +12,7 @@ namespace MT_app.Infrastructure.Repository
     public interface ICustomerRepository : IBaseRepository<Customer>
     {
         bool CheckDuplicatePhoneNumber(string phoneNumber);
+        List<Customer> GetCustomersByContainPhoneNumber(string phoneNumber);
     }
 
     public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
@@ -26,6 +27,14 @@ namespace MT_app.Infrastructure.Repository
         public bool CheckDuplicatePhoneNumber(string phoneNumber)
         {
              return DbContext.Customers.Any(c => c.PhoneNumber == phoneNumber);
+        }
+
+        public List<Customer> GetCustomersByContainPhoneNumber(string phoneNumber)
+        {
+            return DbContext.Customers
+                .Where(c => c.PhoneNumber.Contains(phoneNumber))
+                .OrderByDescending(c => c.OrderCount)
+                .ToList();
         }
     }
 }

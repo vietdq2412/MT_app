@@ -13,12 +13,12 @@ namespace MT_app.Infrastructure.Data
         {
         }
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Product> Products { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<Supplier> Suppliers { get; set; } = null!;
+        public DbSet<Customer> Customers { get; set; } = null!;
+        public DbSet<Order> Orders { get; set; } = null!;
+        public DbSet<OrderDetail> OrderDetails { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

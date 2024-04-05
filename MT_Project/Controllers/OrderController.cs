@@ -1,30 +1,45 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MT_app.business.Services;
 using MT_app.core.Models;
 
 namespace MT_Project.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IProductService productService;
         private readonly IOrderService orderService;
+        private readonly IIdentityService identityService;
         private readonly IOrderDetailService orderDetailService;
+        private readonly IAppUserService appUserService;
 
         public OrderController(
             IOrderService _orderService,
             IOrderDetailService _orderDetailService,
-            IProductService productService)
+            IProductService _productService,
+            IIdentityService _identityService,
+            IAppUserService appUserService)
         {
             this.orderService = _orderService;
             this.orderDetailService = _orderDetailService;
-            this.productService = productService;
+            this.productService = _productService;
+            this.identityService = _identityService;
+            this.appUserService = appUserService;
         }
 
         public async Task<ActionResult> Index()
         {
-            List<Order> list= await orderService.FindByStatus(OrderStatus.Pending.ToString());
+            string username = User.Identity.Name;
+            List<Order> list = await orderService.FindOrderingOrdersByUsername(username);
+            ViewData["Ordering"] = list;
+            return View();
+        }
+
+        public async Task<ActionResult> History()
+        {
+            List<Order> list = await orderService.FindByStatus(OrderStatus.Pending.ToString());
             ViewData["PendingList"] = await orderService.FindByStatus(OrderStatus.Pending.ToString());
-            ViewData["AcceptedList"] = await orderService.FindByStatus(OrderStatus.Accepted.ToString());
             ViewData["DeliveredList"] = await orderService.FindByStatus(OrderStatus.Delivered.ToString());
             ViewData["CancelledList"] = await orderService.FindByStatus(OrderStatus.Cancelled.ToString());
             return View();
@@ -37,7 +52,8 @@ namespace MT_Project.Controllers
             return View();
         }
 
-        public async Task<ActionResult> AddProductToCart(long productId, int quantity)
+        [Authorize]
+        public async Task<ActionResult> AddProductToOrder(long productId, int quantity)
         {
             Product product = productService.FindById(productId).Result!;
             OrderDetail orderDetail = new OrderDetail()
@@ -67,6 +83,17 @@ namespace MT_Project.Controllers
 
             await orderService.Save(order);
             return Redirect(nameof(Cart));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(Order order)
+        {
+            AppUser user = await appUserService.GetByUserLogin(User);
+
+            order.Status = OrderStatus.Ordering.ToString();
+            order.AppUser = user;
+           await orderService.Save(order);
+            return Ok();
         }
     }
 }

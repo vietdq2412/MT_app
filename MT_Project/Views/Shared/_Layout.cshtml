@@ -10,7 +10,10 @@
     @await RenderSectionAsync("Heads", required: false)
 </head>
 <style>
-    body { font-family: 'Jost', sans-serif; }
+    body {
+        width: 100%;
+         font-family: 'Jost', sans-serif;
+    }
 
     a.navbar-brand {
         white-space: normal;
@@ -55,8 +58,9 @@
         background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
     }
 
-    .nav-link {
-          color: #ffffff
+
+    .nav-link:hover {
+        background-color: #0f0c29
     }
 </style>
 <body>
@@ -81,6 +85,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Order" asp-action="Cart">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="Order" asp-action="Index">Order History</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Order" asp-action="Index">Order</a>

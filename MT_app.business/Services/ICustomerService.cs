@@ -12,6 +12,8 @@ namespace MT_app.business.Services
     {
         Task<Customer> FindByPhoneNumber(string phoneNumber);
         bool CheckDuplicatePhoneNumber(string customerPhoneNumber);
+        List<Customer> GetCustomersByContainPhoneNumber(string phoneNumber);
+
     }
 
     public class CustomerService : ICustomerService
@@ -58,6 +60,11 @@ namespace MT_app.business.Services
         public bool CheckDuplicatePhoneNumber(string customerPhoneNumber)
         {
            return customerRepository.CheckDuplicatePhoneNumber(customerPhoneNumber);
+        }
+
+        public List<Customer> GetCustomersByContainPhoneNumber(string phoneNumber)
+        {
+            return customerRepository.GetCustomersByContainPhoneNumber(phoneNumber);
         }
 
         Task<Customer> ICustomerService.FindByPhoneNumber(string phoneNumber)

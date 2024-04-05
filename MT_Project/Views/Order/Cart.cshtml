@@ -5,29 +5,17 @@
 @{
     ViewData["Title"] = "Cart";
 }
-<style>
-    .cartItem{
-    border: #0a58ca 1px solid;
-    width: 50px;
-    }
-    
-    .right{
-    border: #a00aca 1px solid;
-    }
-    
-    .strike-text{color: red;text-decoration: line-through}
-    .product-image{
-    width: 100px;
-    height: 100px;
-    }
-    .spec-1{color: #938787;font-size: 15px}h5{font-weight: 400}.para{font-size: 16px}
-</style>
 
+@section Heads{
+    <link rel="stylesheet" href="~/css/cart.css" asp-append-version="true"/>
+
+}
 
 <div class="row">
     <div class="col-8">
         <ul class="list-group list-group-flush">
-            @foreach(var item in ((List<OrderDetail>)ViewData["orderDetails"])!){
+            @foreach (var item in ((List<OrderDetail>)ViewData["orderDetails"])!)
+            {
                 <li class="list-group-item">
                     <div class="row p-2 bg-white border rounded">
                         <div class="col-md-2 mt-1">
@@ -57,11 +45,32 @@
             }
         </ul>
     </div>
-    <div class="col-1"></div>
-    <div class="col-3 p-2 bg-white border rounded">
+    <div class="col-4 p-2 bg-white border rounded">
         <div class="mb-3">
-            <label for="total" class="form-label">Name</label>
-            <input type="text" class="form-control" id="total" placeholder="Name">
+            <label for="total" class="form-label">Customer phone</label>
+            <input type="text" id="phoneInput" class="form-control" id="total" placeholder="Name">
+            <div class="customerResult row">
+                <div class="col-sm-3 col-lg-4 cusResultItem">
+                    <h6>Name asdasd asdasd</h6>
+                    <h6>0019192912</h6>
+                </div>
+                <div class="col-sm-3 col-lg-4 cusResultItem">
+                    <h6>Name asdasd asdasd</h6>
+                    <h6>0019192912</h6>
+                </div>
+            <div class="col-sm-3 col-lg-4 cusResultItem">
+                    <h6>Name asdasd</h6>
+                    <h6>0019192912</h6>
+                </div>
+            <div class="col-sm-3 col-lg-4 cusResultItem">
+                    <h6>Name asdasd</h6>
+                    <h6>0019192912</h6>
+                </div>
+                <div class="col-sm-3 col-lg-4 cusResultItem">
+                    <h6>Name asdasd</h6>
+                    <h6>0019192912</h6>
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label for="customerName" class="form-label">Name</label>
@@ -80,8 +89,58 @@
             <input type="number" class="form-control" id="customerPhone" placeholder="00000">
         </div>
         <div class="mb-3">
-            <button class="btn btn-primary btn-sm" type="button"><a asp-action="PlaceOrder">Order</a></button>
+            <button class="btn btn-primary btn-sm" type="button">
+                <a asp-action="PlaceOrder">Order</a>
+            </button>
         </div>
-        
+
     </div>
 </div>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function() {
+            $("#getCustomersLink").click(function() {
+                var phoneNumber = $("#phoneInput").val();
+                var url = $(this).attr("href") + "?phoneNumber=" + phoneNumber;
+                $(this).attr("href", url);
+            });
+        });
+
+        $(document).ready(function() {
+            var timeoutId;
+
+            $("#phoneInput").on("input",
+                function() {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(function() {
+                            var phoneNumber = $("#phoneInput").val();
+                            $.ajax({
+                                url: '@Url.Action("GetCustomersByContainPhoneNumber", "Customers")',
+                                type: "GET",
+                                data: { phoneNumber: phoneNumber },
+                                success: function(response) {
+                                    $(".customerResult").empty();
+
+                                    response.forEach(function(customer) {
+                                        $(".customerResult").append(
+                                            "<div class=\"col-sm-3 col-lg-4 cusResultItem\">" +
+                                            "    <h6>"+customer.name+"</h6>" +
+                                            "    <h6>"+customer.phoneNumber+"</h6>" +
+                                            "</div>"
+                                    );
+                                    });
+
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(error);
+                                }
+                            });
+                        },
+                        500);
+                });
+        });
+    </script>
+}

@@ -29,6 +29,14 @@ namespace MT_Project.Controllers
         {
             return Json(_customerService.FindAll());
         }
+        
+        [HttpGet("findByPhone")]
+        public JsonResult GetCustomersByContainPhoneNumber(string phoneNumber)
+        {
+            List<Customer> list = _customerService.GetCustomersByContainPhoneNumber(phoneNumber);
+            return Json(list);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(Customer customer)
@@ -36,6 +44,8 @@ namespace MT_Project.Controllers
             if (!_customerService.CheckDuplicatePhoneNumber(customer.PhoneNumber))
             {
                 await _customerService.Save(customer);
+                TempData["Message"] = "Created!!";
+
                 return RedirectToAction(nameof(Index));
             }
             ModelState.AddModelError(string.Empty, "Phone number duplicated!!");

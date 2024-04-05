@@ -1,0 +1,45 @@
+﻿.cartItem {
+    border: #0a58ca 1px solid;
+    width: 50px;
+}
+
+.right {
+    border: #a00aca 1px solid;
+}
+
+.strike-text {
+    color: red;
+    text-decoration: line-through
+}
+
+.product-image {
+    width: 100px;
+    height: 100px;
+}
+
+.spec-1 {
+    color: #938787;
+    font-size: 15px
+}
+
+h5 {
+    font-weight: 400
+}
+
+.para {
+    font-size: 16px
+}
+
+
+.cusResultItem {
+    border: #ccdaef solid 2px;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 15px;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+
+.cusResultItem:hover {
+    background-color:rgb(240, 246, 246)
+}
