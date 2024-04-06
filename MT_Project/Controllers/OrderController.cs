@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MT_app.business.Services;
 using MT_app.core.Models;
+using MT_app.core.ViewModel;
 
 namespace MT_Project.Controllers
 {
@@ -13,19 +14,22 @@ namespace MT_Project.Controllers
         private readonly IIdentityService identityService;
         private readonly IOrderDetailService orderDetailService;
         private readonly IAppUserService appUserService;
+        private readonly ICustomerService customerService;
 
         public OrderController(
             IOrderService _orderService,
             IOrderDetailService _orderDetailService,
             IProductService _productService,
             IIdentityService _identityService,
-            IAppUserService appUserService)
+            IAppUserService appUserService,
+            ICustomerService customerService)
         {
             this.orderService = _orderService;
             this.orderDetailService = _orderDetailService;
             this.productService = _productService;
             this.identityService = _identityService;
             this.appUserService = appUserService;
+            this.customerService = customerService;
         }
 
         public async Task<ActionResult> Index(int? page)
@@ -50,7 +54,7 @@ namespace MT_Project.Controllers
 
         public async Task<ActionResult> Cart()
         {
-            List<OrderDetail> orderDetails = await orderDetailService.FindOrderingItems(User.Identity.Name);
+            List<OrderDetail> orderDetails = await orderDetailService.FindOrderingItems(User.Identity!.Name!);
             ViewData["orderDetails"] = orderDetails;
             return View();
         }
@@ -89,21 +93,19 @@ namespace MT_Project.Controllers
             return Redirect(nameof(Cart));
         }
 
-        public async Task<ActionResult> PlaceOrder()
+        [HttpPost]
+        public async Task<IActionResult> PlaceOrder(OrderViewModel orderViewModel)
         {
-            // Order order = new Order()
-            // {
-            //     Name = "order",
-            //     OrderDetails = orderDetailService.FindOrderingItems(),
-            //     Status = OrderStatus.Pending.ToString(),
-            // };
-            // order.TotalPrice = 0;
-            // foreach (var item in order.OrderDetails)
-            // {
-            //     order.TotalPrice += item.TotalPrice;
-            // }
-            //
-            // await orderService.Save(order);
+            Order order = (await orderService.FindById(orderViewModel.OrderId))!;
+            Customer customer = (await customerService.FindById(orderViewModel.CustomerId))!;
+
+            order.Customer = customer;
+            order.Address = orderViewModel.Address;
+            order.Note = orderViewModel.Note;
+
+            order.Status = OrderStatus.Processing.ToString();
+
+            await orderService.Update(order);
             return Redirect(nameof(Cart));
         }
 

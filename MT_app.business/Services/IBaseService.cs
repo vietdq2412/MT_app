@@ -6,6 +6,6 @@
         public Task<List<T>> FindAll();
         public Task<T?> FindById(long? id);
         public Task Delete(long id);
-        public Task Update(long id);
+        public Task Update(T t);
     }
 }

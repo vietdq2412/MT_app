@@ -77,6 +77,7 @@ namespace MT_app.business.Services
                     _logger.LogInformation("User created a new account with password.");
                     SendConfirmEmail(user, model);
                 }
+
                 await _userManager.AddToRoleAsync(user, "Staff");
 
                 return result;

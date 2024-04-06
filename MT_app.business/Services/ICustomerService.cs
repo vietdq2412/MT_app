@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MT_app.core.Models;
+﻿using MT_app.core.Models;
 using MT_app.Infrastructure.Repository;
 
 namespace MT_app.business.Services
 {
     public interface ICustomerService : IBaseService<Customer>
     {
-        Task<Customer> FindByPhoneNumber(string phoneNumber);
         bool CheckDuplicatePhoneNumber(string customerPhoneNumber);
         List<Customer> GetCustomersByContainPhoneNumber(string phoneNumber);
-
     }
 
     public class CustomerService : ICustomerService
@@ -46,30 +39,20 @@ namespace MT_app.business.Services
             return customerRepository.Delete(id);
         }
 
-
-        public Task Update(long id)
-        {
-            return customerRepository.Update(customerRepository.FindById(id).Result!);
-        }
-
-        public Task FindByPhoneNumber(string phoneNumber)
+        public Task Update(Customer t)
         {
             throw new NotImplementedException();
         }
 
+
         public bool CheckDuplicatePhoneNumber(string customerPhoneNumber)
         {
-           return customerRepository.CheckDuplicatePhoneNumber(customerPhoneNumber);
+            return customerRepository.CheckDuplicatePhoneNumber(customerPhoneNumber);
         }
 
         public List<Customer> GetCustomersByContainPhoneNumber(string phoneNumber)
         {
             return customerRepository.GetCustomersByContainPhoneNumber(phoneNumber);
-        }
-
-        Task<Customer> ICustomerService.FindByPhoneNumber(string phoneNumber)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -55,14 +55,14 @@ namespace MT_app.business.Services
             return await oderDetailRepository.FindOrderingItemsByProductIdAndOrderId(productId, orderId);
         }
 
-        public Task Delete(long id)
+        public async Task Delete(long id)
         {
-            throw new NotImplementedException();
+           await oderDetailRepository.Delete(id);
         }
 
-        public Task Update(long id)
+        public async Task Update(OrderDetail t)
         {
-            throw new NotImplementedException();
+          await oderDetailRepository.Update(t); 
         }
     }
 }

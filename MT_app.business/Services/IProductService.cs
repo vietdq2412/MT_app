@@ -37,10 +37,9 @@ namespace MT_app.business.Services
             return productRepository.Delete(id);
         }
 
-
-        public Task Update(long id)
+        public async Task Update(Product t)
         {
-            return productRepository.Update(productRepository.FindById(id).Result!);
+            await productRepository.Update(t);
         }
     }
 }

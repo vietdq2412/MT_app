@@ -43,14 +43,15 @@ namespace MT_app.business.Services
             return await oderRepository.FindOrdersByUsernameAndStatus(username, status);
         }
 
-        public Task Delete(long id)
+        public async Task Delete(long id)
         {
-            throw new NotImplementedException();
+            await oderRepository.Delete(id);
         }
 
-        public Task Update(long id)
+        public async Task Update(Order t)
         {
-            throw new NotImplementedException();
+            await oderRepository.Update(t);
         }
+
     }
 }

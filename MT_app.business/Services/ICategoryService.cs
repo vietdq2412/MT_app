@@ -32,15 +32,15 @@ namespace MT_app.business.Services
             return categoryRepository.FindById(id);
         }
 
+
         public Task Delete(long id)
         {
             return categoryRepository.Delete(id);
         }
 
-
-        public Task Update(long id)
+        public Task Update(Category t)
         {
-            return categoryRepository.Update(categoryRepository.FindById(id).Result!);
+            throw new NotImplementedException();
         }
     }
 }

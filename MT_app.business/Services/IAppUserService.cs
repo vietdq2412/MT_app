@@ -50,20 +50,19 @@ namespace MT_app.business.Services
             throw new NotImplementedException();
         }
 
-        public Task Update(long id)
+        public Task Update(AppUser t)
         {
             throw new NotImplementedException();
         }
 
         public async Task<AppUser> GetByUsernameAsync(string username)
         {
-           return await _userManager.FindByEmailAsync(username);
+            return await _userManager.FindByEmailAsync(username);
         }
 
         public async Task<AppUser> GetByUserLogin(ClaimsPrincipal user)
         {
             return await _userManager.GetUserAsync(user);
         }
-
     }
 }
