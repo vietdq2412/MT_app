@@ -33,19 +33,11 @@
                 <input asp-for="RegisterInput.ConfirmPassword" placeholder="Confirm password" aria-required="true"/>
                 <span asp-validation-for="RegisterInput.ConfirmPassword" class="text-danger"></span>
                 
+                <input asp-for="RegisterInput.FirstName" placeholder="FirstName" aria-required="true" />
+                <span asp-validation-for="RegisterInput.FirstName" class="text-danger"></span>
                 
-                @* <div class="row select-role"> *@
-                @*     <div class="col-4"> *@
-                @*         Staff<input type="radio" asp-for="RegisterInput.Role" value="Staff"> *@
-                @*     </div> *@
-                @*     <div class="col-4"> *@
-                @*         Manager<input type="radio" asp-for="RegisterInput.Role" value="Manager"> *@
-                @* *@
-                @*     </div> *@
-                @*     <div class="col-4"> *@
-                @*         Admin<input type="radio" asp-for="RegisterInput.Role" value="Admin"> *@
-                @*     </div> *@
-                @* </div> *@
+                <input asp-for="RegisterInput.LastName" placeholder="LastName" aria-required="true" />
+                <span asp-validation-for="RegisterInput.LastName" class="text-danger"></span>
                 
                 <button>Sign up</button>
             </form>

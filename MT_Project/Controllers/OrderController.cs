@@ -28,11 +28,14 @@ namespace MT_Project.Controllers
             this.appUserService = appUserService;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? page)
         {
             string username = User.Identity.Name;
-            List<Order> list = await orderService.FindOrderingOrdersByUsername(username);
+            List<Order> list =
+                await orderService.FindOrdersByUsernameAndStatus(username, OrderStatus.Ordering.ToString());
+            int pageNumber = page ?? 1;
             ViewData["Ordering"] = list;
+            ViewData["Page"] = pageNumber;
             return View();
         }
 
@@ -45,9 +48,9 @@ namespace MT_Project.Controllers
             return View();
         }
 
-        public ActionResult Cart()
+        public async Task<ActionResult> Cart()
         {
-            List<OrderDetail> orderDetails = orderDetailService.FindItemsNotOrdered();
+            List<OrderDetail> orderDetails = await orderDetailService.FindOrderingItems(User.Identity.Name);
             ViewData["orderDetails"] = orderDetails;
             return View();
         }
@@ -56,6 +59,7 @@ namespace MT_Project.Controllers
         public async Task<ActionResult> AddProductToOrder(long productId, int quantity)
         {
             Product product = productService.FindById(productId).Result!;
+            List<Order> order = await orderService.FindOrdersByUsernameAndStatus(User.Identity.Name, OrderStatus.Ordering.ToString());
             OrderDetail orderDetail = new OrderDetail()
             {
                 ProductId = productId,
@@ -63,25 +67,43 @@ namespace MT_Project.Controllers
                 Quantity = quantity,
                 TotalPrice = product.Price * quantity
             };
+
+            if (order.Any())
+            {
+                orderDetail.Order = order[0];
+            }
+            else
+            {
+                AppUser user = await appUserService.GetByUserLogin(User);
+                Order newOrder = new Order()
+                {
+                    Name = user.FirstName + " " + user.LastName,
+                    AppUser = user,
+                    Status = OrderStatus.Ordering.ToString(),
+                    TotalPrice = 0
+                };
+                orderDetail.Order = newOrder;
+            }
+
             await orderDetailService.Save(orderDetail);
             return Redirect(nameof(Cart));
         }
 
         public async Task<ActionResult> PlaceOrder()
         {
-            Order order = new Order()
-            {
-                Name = "order",
-                OrderDetails = orderDetailService.FindItemsNotOrdered(),
-                Status = OrderStatus.Pending.ToString(),
-            };
-            order.TotalPrice = 0;
-            foreach (var item in order.OrderDetails)
-            {
-                order.TotalPrice += item.TotalPrice;
-            }
-
-            await orderService.Save(order);
+            // Order order = new Order()
+            // {
+            //     Name = "order",
+            //     OrderDetails = orderDetailService.FindOrderingItems(),
+            //     Status = OrderStatus.Pending.ToString(),
+            // };
+            // order.TotalPrice = 0;
+            // foreach (var item in order.OrderDetails)
+            // {
+            //     order.TotalPrice += item.TotalPrice;
+            // }
+            //
+            // await orderService.Save(order);
             return Redirect(nameof(Cart));
         }
 
@@ -92,8 +114,8 @@ namespace MT_Project.Controllers
 
             order.Status = OrderStatus.Ordering.ToString();
             order.AppUser = user;
-           await orderService.Save(order);
-            return Ok();
+            await orderService.Save(order);
+            return Redirect(nameof(Index));
         }
     }
 }

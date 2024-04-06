@@ -48,28 +48,8 @@
     <div class="col-4 p-2 bg-white border rounded">
         <div class="mb-3">
             <label for="total" class="form-label">Customer phone</label>
-            <input type="text" id="phoneInput" class="form-control" id="total" placeholder="Name">
+            <input type="text" id="phoneInput" class="form-control" id="total" placeholder="00">
             <div class="customerResult row">
-                <div class="col-sm-3 col-lg-4 cusResultItem">
-                    <h6>Name asdasd asdasd</h6>
-                    <h6>0019192912</h6>
-                </div>
-                <div class="col-sm-3 col-lg-4 cusResultItem">
-                    <h6>Name asdasd asdasd</h6>
-                    <h6>0019192912</h6>
-                </div>
-            <div class="col-sm-3 col-lg-4 cusResultItem">
-                    <h6>Name asdasd</h6>
-                    <h6>0019192912</h6>
-                </div>
-            <div class="col-sm-3 col-lg-4 cusResultItem">
-                    <h6>Name asdasd</h6>
-                    <h6>0019192912</h6>
-                </div>
-                <div class="col-sm-3 col-lg-4 cusResultItem">
-                    <h6>Name asdasd</h6>
-                    <h6>0019192912</h6>
-                </div>
             </div>
         </div>
         <div class="mb-3">
@@ -77,16 +57,12 @@
             <input type="text" class="form-control" id="customerName" placeholder="Name">
         </div>
         <div class="mb-3">
-            <label for="customerEmail" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="customerEmail" placeholder="name@example.com">
-        </div>
-        <div class="mb-3">
             <label for="customerAddress" class="form-label">Address</label>
             <input type="text" class="form-control" id="customerAddress" placeholder="Address . . .">
         </div>
         <div class="mb-3">
-            <label for="customerPhone" class="form-label">Phone</label>
-            <input type="number" class="form-control" id="customerPhone" placeholder="00000">
+            <label for="orderNote" class="form-label">Note</label>
+            <input type="text" class="form-control" id="orderNote" placeholder=". . .">
         </div>
         <div class="mb-3">
             <button class="btn btn-primary btn-sm" type="button">
@@ -127,12 +103,15 @@
                                     response.forEach(function(customer) {
                                         $(".customerResult").append(
                                             "<div class=\"col-sm-3 col-lg-4 cusResultItem\">" +
-                                            "    <h6>"+customer.name+"</h6>" +
-                                            "    <h6>"+customer.phoneNumber+"</h6>" +
+                                            "    <h6>" +
+                                            customer.name +
+                                            "</h6>" +
+                                            "    <h6>" +
+                                            customer.phoneNumber +
+                                            "</h6>" +
                                             "</div>"
-                                    );
+                                        );
                                     });
-
                                 },
                                 error: function(xhr, status, error) {
                                     console.error(error);

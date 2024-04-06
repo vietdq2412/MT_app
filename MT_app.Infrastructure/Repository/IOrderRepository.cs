@@ -7,7 +7,7 @@ namespace MT_app.Infrastructure.Repository
     public interface IOrderRepository : IBaseRepository<Order>
     {
         Task<List<Order>> FindByStatus(string status);
-        Task<List<Order>> FindOrderingOrdersByUsername(string username);
+        Task<List<Order>> FindOrdersByUsernameAndStatus(string username, string status);
     }
 
     public class OrderRepository : BaseRepository<Order>, IOrderRepository
@@ -26,9 +26,8 @@ namespace MT_app.Infrastructure.Repository
                 .ToListAsync();
         }
 
-        public async Task<List<Order>> FindOrderingOrdersByUsername(string username)
+        public async Task<List<Order>> FindOrdersByUsernameAndStatus(string username, string status)
         {
-            var status = OrderStatus.Ordering.ToString();
             return await DbContext.Orders
                 .Where(o => o.Status == status)
                 .Where(o => o.AppUser!.Email == username)

@@ -6,7 +6,7 @@ namespace MT_app.business.Services
     public interface IOrderService : IBaseService<Order>
     {
         Task<List<Order>> FindByStatus(string status);
-        Task<List<Order>> FindOrderingOrdersByUsername(string username);
+        Task<List<Order>> FindOrdersByUsernameAndStatus(string username, string status);
     }
 
     public class OrderService : IOrderService
@@ -38,9 +38,9 @@ namespace MT_app.business.Services
             return await oderRepository.FindByStatus(status);
         }
 
-        public async Task<List<Order>> FindOrderingOrdersByUsername(string username)
+        public async Task<List<Order>> FindOrdersByUsernameAndStatus(string username, string status)
         {
-           return await oderRepository.FindOrderingOrdersByUsername(username);
+            return await oderRepository.FindOrdersByUsernameAndStatus(username, status);
         }
 
         public Task Delete(long id)

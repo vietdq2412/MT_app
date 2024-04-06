@@ -5,31 +5,34 @@ namespace MT_app.business.Services
 {
     public interface IOrderDetailService : IBaseService<OrderDetail>
     {
-        List<OrderDetail> FindItemsNotOrdered();
-        List<OrderDetail> FindItemNotOrderedByProductId(long? id);
+        Task<List<OrderDetail>> FindOrderingItems(string username);
     }
 
     public class OrderDetailService : IOrderDetailService
     {
         private readonly IOrderDetailRepository oderDetailRepository;
+        private readonly IOrderRepository orderRepository;
 
-        public OrderDetailService(IOrderDetailRepository oderRepository)
+        public OrderDetailService(IOrderDetailRepository oderDetailRepository,
+            IOrderRepository orderRepository)
         {
-            this.oderDetailRepository = oderRepository;
+            this.oderDetailRepository = oderDetailRepository;
+            this.orderRepository = orderRepository;
         }
 
-        public Task Save(OrderDetail orderDetail)
+        public async Task Save(OrderDetail orderDetail)
         {
-            List<OrderDetail> od = FindItemNotOrderedByProductId(orderDetail.ProductId);
+            List<OrderDetail> od = await FindOrderingItemsByProductId(orderDetail.ProductId, orderDetail.Order.Id);
             if (od.Any())
             {
                 OrderDetail existOd = od[0];
                 existOd.Quantity += orderDetail.Quantity;
-                orderDetail = existOd;
-                return oderDetailRepository.Update(orderDetail);
+                await oderDetailRepository.Update(existOd);
             }
-
-            return oderDetailRepository.Add(orderDetail);
+            else
+            {
+                await oderDetailRepository.Add(orderDetail);
+            }
         }
 
         public async Task<List<OrderDetail>> FindAll()
@@ -42,15 +45,14 @@ namespace MT_app.business.Services
             return oderDetailRepository.FindById(id);
         }
 
-        public List<OrderDetail> FindItemsNotOrdered()
+        public async Task<List<OrderDetail>> FindOrderingItems(string username)
         {
-            return oderDetailRepository.findNotOrderedItem()
-                .Result;
+            return await oderDetailRepository.FindOrderItemsInCartByUsername(username);
         }
 
-        public List<OrderDetail> FindItemNotOrderedByProductId(long? id)
+        public async Task<List<OrderDetail>> FindOrderingItemsByProductId(long? productId, long? orderId)
         {
-            return oderDetailRepository.findItemsNotOrderedByProductId(id).Result;
+            return await oderDetailRepository.FindOrderingItemsByProductIdAndOrderId(productId, orderId);
         }
 
         public Task Delete(long id)

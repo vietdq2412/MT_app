@@ -4,32 +4,87 @@
 @{
     ViewData["Title"] = "Order";
 }
-<h1>Oder</h1>
+@{
+    var orderingList = (List<Order>)ViewData["Ordering"];
+    int itemsPerPage = 3;
+    int totalPages = (int)Math.Ceiling((double)orderingList.Count / itemsPerPage);
+    int currentPage = (int)ViewData["Page"];
+    var startIndex = (currentPage - 1) * itemsPerPage;
+    var endIndex = Math.Min(startIndex + itemsPerPage, orderingList.Count);
+}
+
+@section Heads{
+    <link rel="stylesheet" href="~/css/orderIndex.css" asp-append-version="true"/>
+
+}
 
 <div class="row">
-    <div class="col-6">
-        <form asp-action="CreateOrder" class="row">
-            <div class="col-auto">
-                <input asp-for="Name" type="text" class="form-control" placeholder="Order name"/>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Create</button>
-            </div>
-        </form>
-    </div>
-    <div class="col-6">
-        asd
+    <div class="row">
+        <div class="col-6">
+            <form asp-action="CreateOrder" class="row">
+                <div class="col-auto">
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Order name"/>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+            <hr/>
+        </div>
+        <div class="col-6">
+        </div>
     </div>
 </div>
-
-<div class="row order-list">
-    @foreach (var item in ((List<Order>)ViewData["Ordering"]!))
-    {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.Name</td>
-            <td>@item.CreatedDate</td>
-            <td></td>
-        </tr>
-    }
-</div>  
+<div class="row">
+</div>
+<div class="row">
+    <div class="col-7">
+        <div class="row order-list">
+            @foreach (var item in orderingList.GetRange(startIndex, endIndex - startIndex))
+            {
+                <div class="row order-item">
+                    <div class="row">
+                        <div class="col-8">
+                            <h4>@item.Name</h4>
+                        </div>
+                        <div class="col-4 order-item-right">
+                            <i>@item.CreatedDate</i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            Note:
+                            <p class="note-paragraph">@item.Note</p>
+                        </div>
+                        <div class="col-4 order-item-right">
+                            <h5 class="order-item-total">@($"{item.TotalPrice:#,0} VND")</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+           @if (totalPages > 1)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @if (totalPages <= 5)
+            {
+                <!-- If total pages is less than or equal to 5, show all pages -->
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" href="?page=@i">@i</a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+}
+        </div>
+    </div>
+    <div class="col-1"></div>
+    <div class="col-4">
+        <div class="row order-statitic">
+            hi
+        </div>
+    </div>
+</div>

@@ -67,7 +67,8 @@ namespace MT_app.business.Services
             var user = CreateUser();
             await _userStore.SetUserNameAsync(user, model.RegisterInput.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, model.RegisterInput.Email, CancellationToken.None);
-
+            user.FirstName = model.RegisterInput.FirstName;
+            user.LastName = model.RegisterInput.LastName;
             if (await _roleManager.RoleExistsAsync("Staff"))
             {
                 var result = await _userManager.CreateAsync(user, model.RegisterInput.Password);

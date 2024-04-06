@@ -34,6 +34,7 @@ namespace MT_app.Infrastructure.Repository
             return DbContext.Customers
                 .Where(c => c.PhoneNumber.Contains(phoneNumber))
                 .OrderByDescending(c => c.OrderCount)
+                .Take(4)
                 .ToList();
         }
     }
