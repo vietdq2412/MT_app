@@ -4,11 +4,12 @@
 @{
     ViewData["Title"] = "Cart";
     List<OrderDetail> listOrderDetails = (List<OrderDetail>)ViewData["orderDetails"];
-    if (listOrderDetails.Any())
+    object orderId = null;
+    if (listOrderDetails!.Any())
     {
+        orderId = listOrderDetails[0].OrderId!;
     }
 
-    var orderId = listOrderDetails![0].OrderId;
 }
 
 @section Heads{
@@ -62,7 +63,7 @@
             </div>
             <div class="mb-3">
                 <label for="customerName" class="form-label">Name</label>
-                <input type="text" class="form-control order-information" id="customerName" placeholder="Name">
+                <input asp-for="CustomerName" type="text" class="form-control order-information" id="customerName" placeholder="Name">
             </div>
             <div class="mb-3">
                 <label for="customerAddress" class="form-label">Address</label>

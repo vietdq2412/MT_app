@@ -12,6 +12,7 @@ namespace MT_app.core.ViewModel
         public int OrderId { get; set; }
         public int CustomerId { get; set; }
         public string? CustomerPhone { get; set; }
+        public string? CustomerName { get; set; }
         public string? Address { get; set; } 
         public string?   Note { get; set; } 
     }

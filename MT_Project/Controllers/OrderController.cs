@@ -63,7 +63,9 @@ namespace MT_Project.Controllers
         public async Task<ActionResult> AddProductToOrder(long productId, int quantity)
         {
             Product product = productService.FindById(productId).Result!;
-            List<Order> order = await orderService.FindOrdersByUsernameAndStatus(User.Identity.Name, OrderStatus.Ordering.ToString());
+            List<Order> orders =
+                await orderService.FindOrdersByUsernameAndStatus(User.Identity.Name, OrderStatus.Ordering.ToString());
+            Order order;
             OrderDetail orderDetail = new OrderDetail()
             {
                 ProductId = productId,
@@ -72,23 +74,24 @@ namespace MT_Project.Controllers
                 TotalPrice = product.Price * quantity
             };
 
-            if (order.Any())
+            if (orders.Any())
             {
-                orderDetail.Order = order[0];
+                order = orders.First();
             }
             else
             {
                 AppUser user = await appUserService.GetByUserLogin(User);
-                Order newOrder = new Order()
+                order = new Order()
                 {
                     Name = user.FirstName + " " + user.LastName,
                     AppUser = user,
                     Status = OrderStatus.Ordering.ToString(),
                     TotalPrice = 0
                 };
-                orderDetail.Order = newOrder;
             }
 
+            orderDetail.Order = order;
+            order.TotalPrice += orderDetail.TotalPrice;
             await orderDetailService.Save(orderDetail);
             return Redirect(nameof(Cart));
         }
@@ -97,8 +100,20 @@ namespace MT_Project.Controllers
         public async Task<IActionResult> PlaceOrder(OrderViewModel orderViewModel)
         {
             Order order = (await orderService.FindById(orderViewModel.OrderId))!;
-            Customer customer = (await customerService.FindById(orderViewModel.CustomerId))!;
+            Customer customer = new Customer();
+            if (!customerService.CheckDuplicatePhoneNumber(orderViewModel.CustomerPhone))
+            {
+                customer.Name = orderViewModel.CustomerName;
+                customer.Address = orderViewModel.Address;
+                customer.PhoneNumber = orderViewModel.CustomerPhone;
+                customer.OrderCount = 0;
+            }
+            else
+            {
+                customer = (await customerService.FindById(orderViewModel.CustomerId))!;
+            }
 
+            customer.OrderCount += 1;
             order.Customer = customer;
             order.Address = orderViewModel.Address;
             order.Note = orderViewModel.Note;
