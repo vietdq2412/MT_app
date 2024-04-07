@@ -1,17 +1,45 @@
-﻿@model IEnumerable<MT_app.core.Models.Product>
+﻿@using MT_app.core.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<MT_app.core.Models.Product>
 
 @{
     ViewData["Title"] = "Products";
 }
 
 <div class="row">
-    <h1>Index</h1>
-
-    <p>
+    <div class="col-2">
         <a asp-action="Create">Create New</a>
-    </p>
+    </div>
+    <div class="col-10">
+        <form class="form-inline">
+            <div class="row">
+                <div class="col-10">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                </div>
+                <div class="col-2 product-search">
+                    <button class="btn btn-outline-secondary my-2 my-sm-0 product-search-btn" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 <div class="row">
+    <div class="col-2">
+        <div class="row product-order">
+            <div class="row">
+                <h3>Category</h3>
+                <hr/>
+            </div>
+            <div class="row">
+                <ul>
+                @foreach (var category in (ViewData["Categories"] as List<Category>)!)
+                {
+                    <li value="@category.Id">@category.Name</li>
+                }
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="col-10">
         <div class="row">
             @foreach (var item in Model)
@@ -53,9 +81,15 @@
                             <span class="sr-only">Previous</span>
                         </a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
                     <li class="page-item">
                         <a class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
@@ -66,12 +100,6 @@
             </nav>
         </div>
     </div>
-    <div class="col-2">
-        <div class="row product-order">
-            asd3
-        </div>
-    </div>
-
 </div>
 
 @section Heads {

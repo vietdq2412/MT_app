@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Firebase.Auth" Version="1.0.0" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.DotNet.Scaffolding.Shared" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.28" />
   </ItemGroup>

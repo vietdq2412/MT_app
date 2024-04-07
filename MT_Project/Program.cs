@@ -2,13 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using MT_app.business.Services;
-using MT_app.Infrastructure.Data;
-using MT_app.Infrastructure.Data.AuthenModels;
-using MT_app.Infrastructure.Repository;
-using MT_Project.Data;
-using System.Configuration;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using MT_app.core.Models;
+using MT_app.Infrastructure.Data;
+using MT_app.Infrastructure.Repository;
+using System.Configuration;
 
 namespace MT_Project
 {
@@ -64,8 +61,11 @@ namespace MT_Project
 
             builder.Services.AddScoped<IAppUserService, AppUserService>();
             builder.Services.AddScoped<IIdentityService, IdentityService>();
+            
+            builder.Services.AddScoped<IFirebaseStorageService, FirebaseStorageService>();
 
             builder.Services.AddSession();
+
             builder.Services.AddDistributedMemoryCache();
 
             var app = builder.Build();

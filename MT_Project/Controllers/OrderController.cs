@@ -45,10 +45,7 @@ namespace MT_Project.Controllers
 
         public async Task<ActionResult> History()
         {
-            List<Order> list = await orderService.FindByStatus(OrderStatus.Pending.ToString());
-            ViewData["PendingList"] = await orderService.FindByStatus(OrderStatus.Pending.ToString());
-            ViewData["DeliveredList"] = await orderService.FindByStatus(OrderStatus.Delivered.ToString());
-            ViewData["CancelledList"] = await orderService.FindByStatus(OrderStatus.Cancelled.ToString());
+            ViewData[" Completed"] = await orderService.FindByStatus(OrderStatus.Completed.ToString());
             return View();
         }
 
@@ -118,7 +115,7 @@ namespace MT_Project.Controllers
             order.Address = orderViewModel.Address;
             order.Note = orderViewModel.Note;
 
-            order.Status = OrderStatus.Processing.ToString();
+            order.Status = OrderStatus.Completed.ToString();
 
             await orderService.Update(order);
             return Redirect(nameof(Cart));
