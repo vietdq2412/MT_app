@@ -43,9 +43,9 @@ namespace MT_app.business.Services
             return await oderRepository.FindOrdersByUsernameAndStatus(username, status);
         }
 
-        public async Task Delete(long id)
+        public async Task Delete(Order order)
         {
-            await oderRepository.Delete(id);
+            await oderRepository.Delete(order);
         }
 
         public async Task Update(Order t)

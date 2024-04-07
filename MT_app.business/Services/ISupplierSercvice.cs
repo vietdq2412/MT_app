@@ -32,9 +32,9 @@ namespace MT_app.business.Services
             return supplierRepository.FindById(id);
         }
 
-        public Task Delete(long id)
+        public Task Delete(Supplier supplier)
         {
-            return supplierRepository.Delete(id);
+            return supplierRepository.Delete(supplier);
         }
 
         public async Task Update(Supplier t)

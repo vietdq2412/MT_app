@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using MT_app.business.Services;
 using MT_app.core.Models;
 
@@ -10,10 +11,13 @@ namespace MT_Project.Controllers
     public class SuppliersController : Controller
     {
         private readonly ISupplierService supplierService;
+        private readonly IMemoryCache cache;
 
-        public SuppliersController(ISupplierService supplierService)
+
+        public SuppliersController(ISupplierService supplierService, IMemoryCache cache)
         {
             this.supplierService = supplierService;
+            this.cache = cache;
         }
 
         public async Task<IActionResult> Index()
@@ -26,17 +30,18 @@ namespace MT_Project.Controllers
         public async Task<IActionResult> Create(Supplier supplier)
         {
             await supplierService.Save(supplier);
+            List<Supplier> suppliers = await supplierService.FindAll();
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+            cache.Set("suppliers", suppliers, cacheEntryOptions);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(long id)
-        {
-            if (supplierService.Delete(id).IsCompleted)
-            {
-                return RedirectToAction(nameof(Index));
-            }
 
-            return NotFound();
+        public async Task<IActionResult> Delete(long id)
+        {
+            await supplierService.Delete((await supplierService.FindById(id))!);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

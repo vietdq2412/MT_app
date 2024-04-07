@@ -55,9 +55,9 @@ namespace MT_app.business.Services
             return await oderDetailRepository.FindOrderingItemsByProductIdAndOrderId(productId, orderId);
         }
 
-        public async Task Delete(long id)
+        public async Task Delete(OrderDetail orderDetail)
         {
-           await oderDetailRepository.Delete(id);
+           await oderDetailRepository.Delete(orderDetail);
         }
 
         public async Task Update(OrderDetail t)

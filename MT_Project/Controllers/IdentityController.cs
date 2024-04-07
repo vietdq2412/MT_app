@@ -39,14 +39,7 @@ namespace MT_Project.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AppUserIdentityViewModel viewModel)
         {
-
             var result = await _identityService.Login(viewModel);
-            if (result.Succeeded)
-            {
-                _logger.LogInformation("User logged in.");
-                // HttpContext.Session.SetString("userLogin", "Value");
-                return Redirect(viewModel.ReturnUrl);
-            }
 
             if (_identityService.IsConfirmEmailRequired(viewModel).Result)
             {
@@ -56,6 +49,14 @@ namespace MT_Project.Controllers
                 ViewData["returnUrl"] = viewModel.ReturnUrl;
                 return View("LoginRegister", viewModel);
             }
+
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User logged in.");
+                // HttpContext.Session.SetString("userLogin", "Value");
+                return Redirect(viewModel.ReturnUrl);
+            }
+
 
             if (result.RequiresTwoFactor)
             {
@@ -76,7 +77,6 @@ namespace MT_Project.Controllers
             ViewData["formSelected"] = "Login";
             ViewData["returnUrl"] = viewModel.ReturnUrl;
             return View("LoginRegister", viewModel);
-
         }
 
         [HttpPost]
@@ -96,11 +96,11 @@ namespace MT_Project.Controllers
                 ViewData["returnUrl"] = model.ReturnUrl;
                 return View("LoginRegister", model);
             }
+
             ViewData["formSelected"] = "Login";
             ViewData["returnUrl"] = model.ReturnUrl;
             ViewData["Messenger"] = "Please check your email to confirm your account!";
             return View("LoginRegister", model);
-
         }
 
         public async Task<IActionResult> ConfirmEmail(string userId, string code, string returnUrl)
@@ -111,7 +111,6 @@ namespace MT_Project.Controllers
                 : "Error confirming your email.";
             ViewData["StatusMessage"] = StatusMessage;
             return RedirectToAction("LoginRegister", new { returnUrl = returnUrl });
-
         }
 
 

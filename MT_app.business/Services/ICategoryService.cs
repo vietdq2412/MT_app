@@ -32,10 +32,9 @@ namespace MT_app.business.Services
             return categoryRepository.FindById(id);
         }
 
-
-        public Task Delete(long id)
+        public async Task Delete(Category t)
         {
-            return categoryRepository.Delete(id);
+            await categoryRepository.Delete(t);
         }
 
         public Task Update(Category t)

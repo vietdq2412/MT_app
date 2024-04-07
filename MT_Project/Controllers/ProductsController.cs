@@ -88,18 +88,22 @@ public class ProductsController : Controller
             product.Categories.Add(categoryService.FindById(categoryId).Result);
         }
 
+        if (productViewModel.ImageFile != null)
+        {
+            string imgPath = (await firebaseStorageService.UploadFile(productViewModel.ImageFile))!;
+            product.Image = imgPath;
+        }
+
         await productService.Save(product);
+
         return RedirectToAction(nameof(Index));
     }
 
     public IActionResult Delete(long id)
     {
-        if (productService.Delete(id).IsCompleted)
-        {
-            return RedirectToAction(nameof(Index));
-        }
+        if (!productService.Delete(productService.FindById(id).Result).IsCompleted) return NotFound();
+        return RedirectToAction(nameof(Index));
 
-        return NotFound();
     }
 
     public IActionResult Edit()
@@ -119,30 +123,10 @@ public class ProductsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UploadFile(UploadFileViewModel productViewModel)
+    public async Task<IActionResult> UploadFile(UploadFileViewModel viewModel)
     {
-        string link = "";
-        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files");
-        if (!Directory.Exists(path))
-            Directory.CreateDirectory(path);
-
-        if (productViewModel.FormFile.Length > 0)
-        {
-            string fileName = productViewModel.FormFile.FileName;
-            FileInfo fileInfo = new FileInfo(fileName);
-
-            string fileNameWithPath = Path.Combine(path, fileName);
-
-            await using (var fileStream = new FileStream(fileNameWithPath, FileMode.Create))
-            {
-                await productViewModel.FormFile.CopyToAsync(fileStream);
-                link = await firebaseStorageService.Upload(fileStream, fileName);
-            }
-
-
-            Console.WriteLine(link);
-        }
-
+        var link = await firebaseStorageService.UploadFile(viewModel.FormFile);
+        
         ViewData["link"] = link;
         return View();
     }

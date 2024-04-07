@@ -1,11 +1,13 @@
 ﻿using Firebase.Auth;
 using Firebase.Storage;
+using Microsoft.AspNetCore.Http;
+using MT_app.core.ViewModel;
 
 namespace MT_app.business.Services
 {
     public interface IFirebaseStorageService
     {
-        Task<string> Upload(FileStream fileStream, string fileName);
+        Task<string?> UploadFile(IFormFile formFile);
     }
 
     public class FirebaseStorageService : IFirebaseStorageService
@@ -17,10 +19,9 @@ namespace MT_app.business.Services
 
         public FirebaseStorageService()
         {
-            
         }
 
-        public async Task<string> Upload(FileStream fileStream, string fileName)
+        public async Task<string?> Upload(FileStream fileStream, string fileName)
         {
             var auth = new FirebaseAuthProvider(new FirebaseConfig(this.ApiKey));
             var authRs = await auth.SignInWithEmailAndPasswordAsync(this.AuthEmail, this.AuthPassword);
@@ -49,6 +50,32 @@ namespace MT_app.business.Services
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        public async Task<string?> UploadFile(IFormFile formFile)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Files");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            if (formFile.Length > 0)
+            {
+                string fileName = formFile.FileName;
+                FileInfo fileInfo = new FileInfo(fileName);
+                string fileNameWithPath = Path.Combine(path, fileName);
+
+                await using (var fileStream = new FileStream(fileNameWithPath, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(fileStream);
+                    string? result = await Upload(fileStream, fileName);
+                    fileStream.Close();
+                    File.Delete(fileNameWithPath);
+
+                    return result;
+                }
+            }
+
+            return null;
         }
     }
 }

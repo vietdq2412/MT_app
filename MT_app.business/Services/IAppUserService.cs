@@ -45,7 +45,7 @@ namespace MT_app.business.Services
             throw new NotImplementedException();
         }
 
-        public Task Delete(long id)
+        public async Task Delete(AppUser t)
         {
             throw new NotImplementedException();
         }

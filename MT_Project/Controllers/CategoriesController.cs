@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using MT_app.business.Services;
 using MT_app.core.Models;
 
@@ -9,10 +10,13 @@ namespace MT_Project.Controllers
     public class CategoriesController : Controller
     {
         private readonly ICategoryService categoryService;
+        private readonly IMemoryCache cache;
 
-        public CategoriesController(ICategoryService categoryService)
+
+        public CategoriesController(ICategoryService categoryService, IMemoryCache cache)
         {
             this.categoryService = categoryService;
+            this.cache = cache;
         }
 
         [Authorize(Roles = "Admin")]
@@ -29,17 +33,17 @@ namespace MT_Project.Controllers
                 Name = catName
             };
             await categoryService.Save(category);
+            List<Category> categories = await categoryService.FindAll();
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+            cache.Set("categories", categories, cacheEntryOptions);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
-            if (categoryService.Delete(id).IsCompleted)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            return NotFound();
+            await categoryService.Delete((await categoryService.FindById(id))!);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

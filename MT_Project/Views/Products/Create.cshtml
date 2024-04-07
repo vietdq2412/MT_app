@@ -10,15 +10,23 @@
         Model.Name = "fun";
     }
 }
+@section Heads {
+    <link rel="stylesheet" href="~/css/productCreate.css" asp-append-version="true" />
+}
 
 <h1>Create</h1>
 
 <h4>Product</h4>
 <hr/>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+    <div class="col-4">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Image</label>
+                <input asp-for="ImageFile" id="imageInput" type="file" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control"/>
@@ -38,8 +46,8 @@
             </div>
             <div class="form-group">
                 <div class="form-group">
-                    <label asp-for="CategoryIds" class="control-label"></label>
-                    <select id="cats" onchange="selectCategory(value)" asp-for="CategoryIds" class="form-control" multiple>
+                    <label asp-for="CategoryIds" class="control-label">Category</label>
+                    <select id="cats" onchange="selectCategory(value)" asp-for="CategoryIds" class="form-control" multiple required>
                         @foreach (var category in (ViewData["Categories"] as List<Category>)!)
                         {
                             <option value="@category.Id">@category.Name</option>
@@ -48,22 +56,14 @@
                 </div>
                 <span asp-validation-for="CategoryIds" class="text-danger"></span>
             </div>
-            @* <div class="form-group"> *@
-            @*     <div class="form-group"> *@
-            @*         <label>Select Categories</label> *@
-            @*         <select onchange="selectCategory(value)" id="categoriesSelect" class="form-control"> *@
-            @*             @foreach (var category in (ViewData["Categories"] as List<Category>)!) *@
-            @*             { *@
-            @*                 <option value="@category">@category.Name</option> *@
-            @*             } *@
-            @*         </select> *@
-            @*     </div> *@
-            @* </div> *@
             <div id="selectedCategories"></div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary"/>
             </div>
         </form>
+    </div>
+    <div class="col-8">
+        <div id="imagePreview"></div>
     </div>
 </div>
 <div>
@@ -77,8 +77,28 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#cats').select2();
+        });
+
+        $(document).ready(function() {
+            $('#imageInput').change(function(event) {
+                var imageInput = event.target;
+                var imagePreview = $('#imagePreview');
+
+                if (imageInput.files && imageInput.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var imgElement = $('<img>').attr('src', e.target.result).addClass('preview-product-image');
+                        imagePreview.empty();
+                        imagePreview.append(imgElement);
+                    };
+
+                    reader.readAsDataURL(imageInput.files[0]);
+                } else {
+                    imagePreview.empty();
+                }
+            });
         });
     </script>
 }

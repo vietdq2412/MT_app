@@ -60,7 +60,7 @@
                         @Html.DisplayFor(modelItem => item.UpdatedDate)
                     </td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-controller="Categories" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>
                 </tr>
             }

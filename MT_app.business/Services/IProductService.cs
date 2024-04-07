@@ -32,9 +32,9 @@ namespace MT_app.business.Services
             return await productRepository.FindById(id);
         }
 
-        public Task Delete(long id)
+        public Task Delete(Product product)
         {
-            return productRepository.Delete(id);
+            return productRepository.Delete(product);
         }
 
         public async Task Update(Product t)

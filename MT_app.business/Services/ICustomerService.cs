@@ -34,9 +34,9 @@ namespace MT_app.business.Services
             return customerRepository.FindById(id);
         }
 
-        public Task Delete(long id)
+        public Task Delete(Customer customer)
         {
-            return customerRepository.Delete(id);
+            return customerRepository.Delete(customer);
         }
 
         public Task Update(Customer t)

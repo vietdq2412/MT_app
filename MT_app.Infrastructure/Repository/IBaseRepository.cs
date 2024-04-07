@@ -9,7 +9,7 @@ namespace MT_app.Infrastructure.Repository
         Task<T?> FindById(long? id);
         Task Add(T entity);
         Task Update(T entity);
-        Task Delete(long? id);
+        Task Delete(T entity);
     }
 
     public class BaseRepository<G> : IBaseRepository<G> where G : class
@@ -45,10 +45,9 @@ namespace MT_app.Infrastructure.Repository
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task Delete(long? id)
+        public async Task Delete(G entity)
         {
-            G g = FindById(id).Result!;
-            dbSet.Remove(g);
+            dbSet.Remove(entity);
             await DbContext.SaveChangesAsync();
         }
     }
