@@ -3,7 +3,7 @@
  App quản lý nhà hàng dùng để quản lý sản phẩm và các đơn hàng do nhân viên bán được
 
  #Staff:
- -Thêm sản phẩm vào giỏ hàng, tạo các đơn hàng
+ - Thêm sản phẩm vào giỏ hàng, tạo các đơn hàng
 
  #Manager:
  - CRUD các sản phẩm
