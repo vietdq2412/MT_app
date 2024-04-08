@@ -36,16 +36,16 @@ namespace MT_Project.Controllers
         {
             string username = User.Identity.Name;
             List<Order> list =
-                await orderService.FindOrdersByUsernameAndStatus(username, OrderStatus.Ordering.ToString());
+                await orderService.FindOrdersByUsernameAndStatus(username, OrderStatus.Completed.ToString());
             int pageNumber = page ?? 1;
-            ViewData["Ordering"] = list;
+            ViewData["Completed"] = list;
             ViewData["Page"] = pageNumber;
             return View();
         }
 
         public async Task<ActionResult> History()
         {
-            ViewData[" Completed"] = await orderService.FindByStatus(OrderStatus.Completed.ToString());
+            ViewData["Completed"] = await orderService.FindByStatus(OrderStatus.Completed.ToString());
             return View();
         }
 

@@ -5,12 +5,12 @@
     ViewData["Title"] = "Order";
 }
 @{
-    var orderingList = (List<Order>)ViewData["Ordering"];
-    int itemsPerPage = 3;
-    int totalPages = (int)Math.Ceiling((double)orderingList.Count / itemsPerPage);
+    var listOrders = (List<Order>)ViewData["Completed"];
+    int itemsPerPage = 2;
+    int totalPages = (int)Math.Ceiling((double)listOrders.Count / itemsPerPage);
     int currentPage = (int)ViewData["Page"];
     var startIndex = (currentPage - 1) * itemsPerPage;
-    var endIndex = Math.Min(startIndex + itemsPerPage, orderingList.Count);
+    var endIndex = Math.Min(startIndex + itemsPerPage, listOrders.Count);
 }
 
 @section Heads{
@@ -40,7 +40,7 @@
 <div class="row">
     <div class="col-7">
         <div class="row order-list">
-            @foreach (var item in orderingList.GetRange(startIndex, endIndex - startIndex))
+            @foreach (var item in listOrders.GetRange(startIndex, endIndex - startIndex))
             {
                 <div class="row order-item">
                     <div class="row">
@@ -57,7 +57,7 @@
                             <p class="note-paragraph">@item.Note</p>
                         </div>
                         <div class="col-4 order-item-right">
-                            <h5 class="order-item-total">@($"{item.TotalPrice:#,0} VND")</h5>
+                            <h5 class="order-item-total">@($"{item.TotalPrice:#,0} đ")</h5>
                         </div>
                     </div>
                 </div>

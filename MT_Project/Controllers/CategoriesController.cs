@@ -12,7 +12,6 @@ namespace MT_Project.Controllers
         private readonly ICategoryService categoryService;
         private readonly IMemoryCache cache;
 
-
         public CategoriesController(ICategoryService categoryService, IMemoryCache cache)
         {
             this.categoryService = categoryService;
