@@ -57,3 +57,7 @@ productCategoryItemActive {
 
     background-color: rgb(234, 233, 242);
 }
+
+#product-content {
+    min-width: 1200px;
+}

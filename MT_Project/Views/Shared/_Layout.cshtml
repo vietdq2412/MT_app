@@ -16,9 +16,7 @@
         margin-top: 100px;
     }
 
-    .navbar {
-        margin-bottom: 0;
-    }
+    .navbar { margin-bottom: 0; }
 
     a.navbar-brand {
         white-space: normal;
@@ -72,7 +70,7 @@
 </style>
 <body>
 <header class="header">
-        <nav style="margin-bottom: 0;" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow">
+    <nav style="margin-bottom: 0;" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow">
         <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">6282!!</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -84,27 +82,27 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="" asp-controller="Categories" asp-action="Index">Category</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="" asp-controller="Suppliers" asp-action="Index">Supplier</a>
-                    </li>
+
+
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Order" asp-action="Cart">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="" asp-controller="Order" asp-action="Index">Order History</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Order" asp-action="Index">Order</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="" asp-controller="Customers" asp-action="Index">Customer</a>
-                    </li>
-                    <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Products" asp-action="UploadFile">UploadFile</a>
-                    </li>
+                    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Categories" asp-action="Index">Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Suppliers" asp-action="Index">Supplier</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Customers" asp-action="Index">Customer</a>
+                        </li>
+                    }
+
                 </ul>
                 <partial name="_LoginPartial"/>
 

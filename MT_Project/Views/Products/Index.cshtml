@@ -8,28 +8,30 @@
 
 <div class="row">
     <div class="col-3">
-        <a asp-action="Create">Create New</a>
+        @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
+        {
+            <a asp-action="Create">Create New</a>
+        }
     </div>
+
     <div class="col-9">
-        <form class="form-inline">
-            <div class="row">
-                <div class="col-10">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                </div>
-                <div class="col-2 product-search">
-                    <button class="btn btn-outline-secondary my-2 my-sm-0 product-search-btn" type="submit">Search</button>
-                </div>
+        <div class="row">
+            <div class="col-10">
+                <input oninput="debouncedGetProductName()" class="form-control mr-sm-2" id="product-search-input" type="search" placeholder="Search" aria-label="Search">
             </div>
-        </form>
+            <div class="col-2 product-search">
+                <button class="btn btn-outline-secondary my-2 my-sm-0 product-search-btn" onclick="getProductName()">Search</button>
+            </div>
+        </div>
     </div>
 </div>
-<div class="row">
+<div class="row" id="product-content">
     <div class="col-2">
         <div class="row product-order">
             <div class="row product-categories">
                 @foreach (var category in (ViewData["Categories"] as List<Category>)!)
                 {
-                    <div id="pc-@category.Id" class="productCategoryItem" onclick="searchByCategory(@category.Id)">
+                    <div id="pc-@category.Id" class="productCategoryItem" onclick="getCategoryId(@category.Id)">
                         <h5 class="product-name">@category.Name</h5>
                     </div>
                 }
@@ -37,7 +39,7 @@
         </div>
     </div>
     <div class="col-10">
-        <div class="row">
+        <div class="row" id="Products">
             @foreach (var item in Model)
             {
                 <div class="col-sm-6 col-lg-3 product-item">
@@ -60,7 +62,7 @@
                                         <span>Price:</span><span>@($"{item.Price:#,0} Đ")</span>
                                     </div>
                                     <div class="d-flex justify-content-between p-price">
-                                        Details |
+                                        Details
                                     </div>
                                 </div>
                             </div>
@@ -70,6 +72,7 @@
             }
         </div>
         <div class="row">
+            <hr style="margin-top: 10px"/>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item">
@@ -97,6 +100,8 @@
             </nav>
         </div>
     </div>
+
+
 </div>
 
 @section Heads {
@@ -106,4 +111,88 @@
 @section Scripts
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqPagination/1.4.1/jquery.jqpagination.min.js"></script>
+    <script>
+        var catId = -1;
+        var productName = '';
+
+        let timeoutId;
+
+        function debounce(func, delay) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(func, delay);
+        }
+
+        function getProductName() {
+
+            productName = $("#product-search-input").val();
+            searchByCategory(catId, productName);
+        }
+
+        function debouncedGetProductName() {
+            debounce(getProductName, 500);
+        }
+
+        function getCategoryId(categoryId) {
+            catId = categoryId;
+            searchByCategory(catId, productName);
+        }
+
+
+        function searchByCategory(categoryId, productName) {
+            var searchUrl = '/Products/SearchByCategoryAndProductName?categoryId=' + categoryId + '&productName=' + productName;
+            console.log(searchUrl);
+            $.ajax({
+                url: searchUrl,
+                type: 'GET',
+                success: function(result) {
+                    console.log(result);
+                    let content = '';
+                    result.forEach(rs => {
+
+                        let formattedPrice = (rs.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                        content +=
+                            `
+                            <div class="col-sm-6 col-lg-3 product-item">
+                                <div class="d-flex justify-content-center  mt-5">
+                                            <a style="text-decoration: none" href="/Products/Details/${rs.id}">
+                                        <div class="card p-3">
+                                            <div class="about-product text-center mt-2">
+                                                <div class="product-image">
+                                                    <img class="product-img"
+                                                         src="${rs.image}"\
+                                                         alt="product img">
+                                                </div>
+                                                <div>
+                                                    <h5 class="product-name">${rs.name}</h5>
+                                                </div>
+                                                <hr/>
+                                            </div>
+                                            <div class="stats mt-2">
+                                                <div class="d-flex justify-content-between p-price">
+                                                            <span>Price:</span><span>${formattedPrice}</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between p-price">
+                                                    Details
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    document.getElementById('Products').innerHTML = content;
+
+                    productContent = '';
+
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+
+    </script>
 }

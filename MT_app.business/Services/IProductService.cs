@@ -5,6 +5,8 @@ namespace MT_app.business.Services
 {
     public interface IProductService : IBaseService<Product>
     {
+        Task<List<Product>> SearchByCategoryAndProductName(long categoryId, string productName);
+
     }
 
     public class ProductService : IProductService
@@ -40,6 +42,11 @@ namespace MT_app.business.Services
         public async Task Update(Product t)
         {
             await productRepository.Update(t);
+        }
+
+        public async Task<List<Product>> SearchByCategoryAndProductName(long categoryId, string productName)
+        {
+          return await productRepository.SearchByCategoryAndProductName(categoryId, productName);
         }
     }
 }

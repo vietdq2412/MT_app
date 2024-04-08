@@ -4,9 +4,11 @@ using MT_app.business.Services;
 using MT_app.core.Models;
 using MT_app.core.ViewModel;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MT_Project.Controllers;
 
+[Authorize]
 public class ProductsController : Controller
 {
     private readonly IProductService productService;
@@ -31,6 +33,7 @@ public class ProductsController : Controller
         this.cache = cache;
     }
 
+    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         List<Product> list = await productService.FindAll();
@@ -71,6 +74,7 @@ public class ProductsController : Controller
         return View();
     }
 
+    [Authorize(Roles = "Admin, Manager")]
     [HttpPost]
     public async Task<IActionResult> Create(ProductViewModel productViewModel)
     {
@@ -99,11 +103,16 @@ public class ProductsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    public async Task<JsonResult> SearchByCategoryAndProductName(long categoryId, string productName)
+    {
+        List<Product> products = await productService.SearchByCategoryAndProductName(categoryId, productName);
+        return Json(products);
+    }
+
     public IActionResult Delete(long id)
     {
         if (!productService.Delete(productService.FindById(id).Result).IsCompleted) return NotFound();
         return RedirectToAction(nameof(Index));
-
     }
 
     public IActionResult Edit()
@@ -126,7 +135,7 @@ public class ProductsController : Controller
     public async Task<IActionResult> UploadFile(UploadFileViewModel viewModel)
     {
         var link = await firebaseStorageService.UploadFile(viewModel.FormFile);
-        
+
         ViewData["link"] = link;
         return View();
     }

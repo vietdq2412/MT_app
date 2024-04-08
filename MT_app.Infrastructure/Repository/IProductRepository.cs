@@ -6,6 +6,7 @@ namespace MT_app.Infrastructure.Repository
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
+        Task<List<Product>> SearchByCategoryAndProductName(long categoryId, string productName);
     }
 
     public class ProductRepository : BaseRepository<Product>, IProductRepository
@@ -22,6 +23,23 @@ namespace MT_app.Infrastructure.Repository
             return (await DbContext.Products
                 .Include(p => p.Supplier)
                 .ToListAsync())!;
+        }
+
+        public async Task<List<Product>> SearchByCategoryAndProductName(long categoryId, string productName)
+        {
+            IQueryable<Product> query = DbContext.Products;
+
+            if (categoryId != -1)
+            {
+                query = query.Where(p => p.Categories!.Any(c => c.Id == categoryId)) ;
+            }
+
+            if (!string.IsNullOrEmpty(productName))
+            {
+                query = query.Where(p => p.Name.Contains(productName));
+            }
+
+            return await query.ToListAsync();
         }
 
         public Task<Product?> FindByName(string name)
